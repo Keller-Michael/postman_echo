@@ -36,15 +36,15 @@ CLASS zcl_postman_echo IMPLEMENTATION.
     DATA(http_request) = http_client->get_http_request(  ).
     http_request->set_uri_path( i_uri_path = '/get' ).
 
-    IF query_string_parameters IS NOT INITIAL.
-      TRY.
+    TRY.
+        IF query_string_parameters IS NOT INITIAL.
           http_request->set_form_fields( query_string_parameters ).
-          result = http_client->execute( if_web_http_client=>get ).
-        CATCH cx_web_message_error
-              cx_web_http_client_error.
-          RAISE EXCEPTION NEW zcx_postman_echo( ).
-      ENDTRY.
-    ENDIF.
+        ENDIF.
+        result = http_client->execute( if_web_http_client=>get ).
+      CATCH cx_web_message_error
+            cx_web_http_client_error.
+        RAISE EXCEPTION NEW zcx_postman_echo( ).
+    ENDTRY.
   ENDMETHOD.
 
   METHOD create_http_client.
@@ -65,15 +65,15 @@ CLASS zcl_postman_echo IMPLEMENTATION.
     http_request->set_uri_path( i_uri_path = '/post' ).
     http_request->set_content_type( 'application/json' ).
 
-    IF json IS NOT INITIAL.
-      TRY.
+    TRY.
+        IF json IS NOT INITIAL.
           http_request->set_text( json ).
-          result = http_client->execute( if_web_http_client=>post ).
-        CATCH cx_web_message_error
-              cx_web_http_client_error.
-          RAISE EXCEPTION NEW zcx_postman_echo( ).
-      ENDTRY.
-    ENDIF.
+        ENDIF.
+        result = http_client->execute( if_web_http_client=>post ).
+      CATCH cx_web_message_error
+            cx_web_http_client_error.
+        RAISE EXCEPTION NEW zcx_postman_echo( ).
+    ENDTRY.
   ENDMETHOD.
 
   METHOD zif_postman_echo~test_basic_auth.
